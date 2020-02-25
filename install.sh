@@ -53,7 +53,7 @@ mark=.done-kaldi-src
 if [ ! -f $mark ]; then
   echo 'Building Kaldi src'
   cd kaldi/src
-  ./configure --shared || exit 1
+  ./configure --shared --use-cuda=no --mathlib=ATLAS || exit 1
   make clean || exit 1
   make depend -j $nj || exit 1
   make -j $nj || exit 1

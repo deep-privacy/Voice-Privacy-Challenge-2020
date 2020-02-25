@@ -13,4 +13,3 @@ python ${proj_dir}/../SCRIPTS/01_prepare.py config_libri_am
 
 # training the RNN model
 python ${proj_dir}/../SCRIPTS/02_train.py config_libri_am
-

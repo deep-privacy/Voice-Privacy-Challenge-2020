@@ -24,9 +24,9 @@ set -e
 #===== begin config =======
 
 nj=$(nproc)
-stage=0
+stage=9
 
-download_full=false  # If download_full=true all the data that can be used in the training/development will be dowloaded (except for Voxceleb-1,2 corpus); otherwise - only those subsets that are used in the current baseline (with the pretrained models)
+download_full=true  # If download_full=true all the data that can be used in the training/development will be dowloaded (except for Voxceleb-1,2 corpus); otherwise - only those subsets that are used in the current baseline (with the pretrained models)
 data_url_librispeech=www.openslr.org/resources/12  # Link to download LibriSpeech corpus
 data_url_libritts=www.openslr.org/resources/60     # Link to download LibriTTS corpus
 corpora=corpora
@@ -87,10 +87,10 @@ mkdir -p $data_netcdf || exit 1;
 # Download  VoxCeleb-1,2 corpus for training anonymization system models
 if $download_full && [[ $stage -le 2 ]]; then
   printf "${GREEN}\nStage 2: In order to download VoxCeleb-1,2 corpus, please go to: http://www.robots.ox.ac.uk/~vgg/data/voxceleb/ ...${NC}\n"
-  sleep 10; 
+  sleep 10;
 fi
 
-# Download LibriSpeech data sets for training anonymization system (train-other-500, train-clean-100) 
+# Download LibriSpeech data sets for training anonymization system (train-other-500, train-clean-100)
 if $download_full && [[ $stage -le 3 ]]; then
   printf "${GREEN}\nStage 3: Downloading LibriSpeech data sets for training anonymization system (train-other-500, train-clean-100)...${NC}\n"
   for part in train-clean-100 train-other-500; do
@@ -105,7 +105,7 @@ if $download_full && [[ $stage -le 4 ]]; then
     local/download_and_untar.sh $corpora $data_url_libritts $part LibriTTS || exit 1;
   done
 fi
- 
+
 # Download LibriTTS data sets for training anonymization system (train-other-500)
 if [ $stage -le 5 ]; then
   printf "${GREEN}\nStage 5: Downloading LibriTTS data sets for training anonymization system (train-other-500)...${NC}\n"
@@ -114,8 +114,8 @@ if [ $stage -le 5 ]; then
   done
 fi
 
-libritts_corpus=$(realpath $corpora/LibriTTS)       # Directory for LibriTTS corpus 
-librispeech_corpus=$(realpath $corpora/LibriSpeech) # Directory for LibriSpeech corpus
+libritts_corpus=$(realpath $corpora/LibriTTS)       # Directory for LibriTTS corpus
+librispeech_corpus=/srv/storage/talc@talc-data.nancy/multispeech/corpus/speech_recognition/LibriSpeech # Directory for LibriSpeech corpus
 
 # Extract xvectors from anonymization pool
 if [ $stage -le 6 ]; then
@@ -123,7 +123,7 @@ if [ $stage -le 6 ]; then
   printf "${GREEN}\nStage 6: Prepare anonymization pool data...${NC}\n"
   local/data_prep_libritts.sh ${libritts_corpus}/train-other-500 data/${anoni_pool} || exit 1;
 fi
-  
+
 if [ $stage -le 7 ]; then
   printf "${GREEN}\nStage 7: Extracting xvectors for anonymization pool...${NC}\n"
   local/featex/01_extract_xvectors.sh --nj $nj data/${anoni_pool} ${xvec_nnet_dir} \
@@ -202,6 +202,7 @@ if [ $stage -le 9 ]; then
         --pseudo-xvec-rand-level $pseudo_xvec_rand_level --distance $distance \
         --proximity $proximity --cross-gender $cross_gender \
         --anon-data-suffix $anon_data_suffix $dset || exit 1;
+      exit 0;
       if [ -f data/$dset/enrolls ]; then
         cp data/$dset/enrolls data/$dset$anon_data_suffix/ || exit 1
       else

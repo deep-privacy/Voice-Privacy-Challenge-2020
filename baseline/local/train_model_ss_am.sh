@@ -9,6 +9,7 @@
 
 set -e
 
+corpora=corpora
 libritts_corpus=$(realpath $corpora/LibriTTS)
 
 ppg_model=exp/models/1_asr_am/exp
@@ -33,6 +34,3 @@ if [ $stage -le 1 ]; then
   local/vc/am/00_run.sh ${feats_out_dir} || exit 1;
   echo "Model is trained and stored at ${nii_scripts}/acoustic-modeling/project-DAR-continuous/MODELS/DAR_001/"
 fi
-
-
-

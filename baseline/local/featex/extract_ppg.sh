@@ -42,7 +42,7 @@ if [ $stage -le 0 ]; then
 	--cmd "$train_cmd" ${data_dir}
 
   steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj $nj \
-       	${data_dir} ${ivec_extractor} ${ivec_data_dir} 
+       	${data_dir} ${ivec_extractor} ${ivec_data_dir}
 fi
 
 if [ $stage -le 1 ]; then
