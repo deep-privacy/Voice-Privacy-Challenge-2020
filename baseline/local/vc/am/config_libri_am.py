@@ -101,7 +101,7 @@ inputDim  = [256, 512, 1]
 
 # inputExt: file name extension of input features
 #   len(inputExt) should be equal to len(inputDirs[0])
-inputExt  = ['.ppg', '.xvector', '.f0']
+inputExt  = ['.bn', '.xvector', '.f0']
 
 # normMask: which dimension should NOT be normalized?
 #  len(inputNormMask) should be = len(inputDim)

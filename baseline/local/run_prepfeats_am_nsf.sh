@@ -56,8 +56,10 @@ test_out=${feat_out_dir}/am_nsf_test # change this to dir where test data will b
 # Extract PPG using chain model
 if [ $stage -le 0 ]; then
   echo "Stage 0: PPG extraction."
-  local/featex/extract_ppg.sh --nj $nj --stage 0 data/${train_data} \
-	  ${ppg_model} ${ppg_dir}/ppg_${train_data}
+  pchampio/local/extract_bn.sh --nj $nj --stage 0 \
+  --fbank-conf fbank_libriTTS.conf \
+  --pitch-conf pitch_libriTTS.conf \
+  ${train_data}
 fi
 
 # Extract 80 dimensional mel spectrograms
@@ -94,6 +96,6 @@ fi
 if [ $stage -le 5 ]; then
   echo "Stage 5: Making netcdf data for AM & NSF training."
   local/featex/03_make_am_nsf_netcdf_data.sh ${train_split} ${dev_split} ${test_split} \
-	  ${ppg_dir}/ppg_${train_data}/phone_post.scp ${melspec_file} \
+	  pchampio/exp/${train_data}_hires/dump_eproj ${melspec_file} \
 	  ${xvec_out_dir} ${train_out} ${test_out}
 fi

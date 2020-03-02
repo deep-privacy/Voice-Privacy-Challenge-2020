@@ -38,20 +38,20 @@ fi
 
 
 if [ $stage -le 1 ]; then
-  python local/featex/create_ppg_data.py ${ppg_file} ${out_dir} || exit 1;
+  python pchampio/local/featex/create_bn_data.py ${ppg_file} ${out_dir} || exit 1;
   python local/featex/create_melspec_data.py ${melspec_file} ${out_dir} || exit 1;
 fi
 
 if [ $stage -le 2 ]; then
   echo "Writing xvector and F0 for train."
   xvec_file=${xvec_out_dir}/xvectors_$(basename ${train_data})/xvector.scp
-  python local/featex/create_xvector_f0_data.py ${train_data} ${xvec_file} ${out_dir} || exit 1;
+  python pchampio/local/featex/create_xvector_f0_data.py ${train_data} ${xvec_file} ${out_dir} || exit 1;
   echo "Writing xvector and F0 for dev."
   xvec_file=${xvec_out_dir}/xvectors_$(basename ${dev_data})/xvector.scp
-  python local/featex/create_xvector_f0_data.py ${dev_data} ${xvec_file} ${out_dir} || exit 1;
+  python pchampio/local/featex/create_xvector_f0_data.py ${dev_data} ${xvec_file} ${out_dir} || exit 1;
   echo "Writing xvector and F0 for test."
   xvec_file=${xvec_out_dir}/xvectors_$(basename ${test_data})/xvector.scp
-  python local/featex/create_xvector_f0_data.py ${test_data} ${xvec_file} ${out_dir} || exit 1;
+  python pchampio/local/featex/create_xvector_f0_data.py ${test_data} ${xvec_file} ${out_dir} || exit 1;
 fi
 
 if [ $stage -le 3 ]; then

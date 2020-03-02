@@ -2,7 +2,7 @@
 # -------
 # input feature directories
 #  here, we use features in ../TESTDATA/vctk_vctk_anonymize for demonstration
-# 
+#
 . path.sh
 . local/vc/am/init.sh
 
@@ -27,7 +27,7 @@ export TEMP_ACOUSTIC_OUTPUT_DIRECTORY=${output_dir}
 # directory to save intermediate files (it will be deleted after)
 export TEMP_ACOUSTIC_TEMP_OUTPUT_DIRECTORY=${output_tmp_dir}
 
-# 
+#
 python ${proj_dir}/../SCRIPTS/03_syn.py config_libri_am
 # after running this scripts, the generated features should be in ${TEMP_ACOUSTIC_OUTPUT_DIRECTORY}
 

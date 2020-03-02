@@ -202,7 +202,6 @@ if [ $stage -le 9 ]; then
         --pseudo-xvec-rand-level $pseudo_xvec_rand_level --distance $distance \
         --proximity $proximity --cross-gender $cross_gender \
         --anon-data-suffix $anon_data_suffix $dset || exit 1;
-      exit 0;
       if [ -f data/$dset/enrolls ]; then
         cp data/$dset/enrolls data/$dset$anon_data_suffix/ || exit 1
       else
@@ -212,6 +211,7 @@ if [ $stage -le 9 ]; then
     done
   done
 fi
+exit 0;
 
 # Make VCTK anonymized evaluation subsets
 if [ $stage -le 10 ]; then

@@ -7,9 +7,12 @@ export LC_ALL=C
 export PATH=$PWD/bin:$PATH
 export LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH
 
-. ../env.sh
+. ../env.sh ""
 
 # based on https://stackoverflow.com/a/5947802/12499892
+export CYAN='\033[0;36m'
 export GREEN='\033[0;32m'
 export RED='\033[0;31m'
 export NC='\033[0m' # No Color
+
+. espnet_path.sh ""

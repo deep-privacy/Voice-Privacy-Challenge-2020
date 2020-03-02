@@ -147,4 +147,13 @@ echo "export PYTHONPATH=$currennt_dir:$nii_dir/pyTools:$PWD/nii_scripts:\$PYTHON
 echo "export nii_scripts=$PWD/nii_scripts" >> env.sh
 echo "export nii_dir=$nii_dir" >> env.sh
 
+mark=.espnet
+if [ ! -f $mark ]; then
+  echo 'Building ESPnet'
+  cd espnet/tools
+  make KALDI=$(pwd)/kaldi -j $(npoc) || exit 1
+  cd $home
+  touch $mark
+fi
+
 echo Done

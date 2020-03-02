@@ -77,30 +77,19 @@ if [ $stage -le 2 ]; then
   local/featex/02_extract_pitch.sh --nj ${nj} data/${data_dir} || exit 1;
 fi
 
-# Extract PPGs for source data
+# Extract BNs for source data
 if [ $stage -le 3 ]; then
   printf "${RED}\nStage a.3: BN extraction for ${data_dir}.${NC}\n"
-  # echo  ${data_netcdf}/${data_dir}/ppg
-
-  mkdir -p ./pchampio
-  mkdir -p ./pchampio/exp
-  mkdir -p ./pchampio/data
-  mkdir -p ./pchampio/models
-
   pchampio/local/extract_bn.sh ${data_dir}
-
-
-  # local/featex/extract_ppg.sh --nj $nj --stage 0 \
-		# ${data_dir} ${ppg_model} ${ppg_dir}/ppg_${data_dir} || exit 1;
-  exit 0;
 fi
 
 # Create netcdf data for voice conversion
 if [ $stage -le 4 ]; then
   printf "${RED}\nStage a.4: Make netcdf data for VC.${NC}\n"
-  local/anon/make_netcdf.sh --stage 2 data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
-	  ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
-	  ${data_netcdf}/${data_dir} || exit 1;
+
+  pchampio/local/make_netcdf.sh data/${data_dir} ${data_dir} \
+    ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
+    ${data_netcdf}/${data_dir} || exit 1;
 fi
 
 if [ $stage -le 5 ]; then
