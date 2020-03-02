@@ -1,5 +1,3 @@
-#!/bin/python
-
 '''
 Script to divide a given data directory for Acoustic modeling 
 and Neural Source Filter waveform modeling. The dev set will contain some
@@ -34,8 +32,8 @@ out_dir = args[2]
 ntest = int(args[3])
 ndev = int(args[4])
 
-print "Config: root_dir =", root_dir, " out_dir =", out_dir
-print "Config: ntest =", ntest, " ndev =", ndev
+print("Config: root_dir =", root_dir, " out_dir =", out_dir)
+print("Config: ntest =", ntest, " ndev =", ndev)
 
 test_dir = join(out_dir, basename(root_dir) + '_test')
 dev_dir = join(out_dir, basename(root_dir) + '_dev')
@@ -86,7 +84,7 @@ with open(join(root_dir, 'utt2spk')) as f:
 # Find ntest/2 male and ntest/2 female speakers
 test_spks = []
 spklim = int(ntest / 2)
-print "Per gender speaker limit for test =", spklim
+print("Per gender speaker limit for test =", spklim)
 mspk, fspk = 0, 0
 for spk, gender in spk2gender.items():
     if mspk < spklim and gender == 'm':
@@ -96,13 +94,13 @@ for spk, gender in spk2gender.items():
         test_spks.append(spk)
         fspk += 1
 
-print "Selected ", len(test_spks), " test speakers."
+print("Selected ", len(test_spks), " test speakers.")
 
 # Find dev spks and utts
 dev_spks = []
 dev_utts = []
 spklim = int(ndev / 2)
-print "Per gender speaker limit for dev = ", spklim
+print("Per gender speaker limit for dev = ", spklim)
 
 mspk, fspk = 0, 0
 for spk, gender in spk2gender.items():
@@ -120,7 +118,7 @@ for spk, gender in spk2gender.items():
             dev_utts.extend(spk_utts)
             fspk += 1
 
-print "Selected ", len(dev_spks), " dev speakers."
+print("Selected ", len(dev_spks), " dev speakers.")
 
 os.makedirs(test_dir)
 with open(join(test_dir, 'spk2utt.unsorted'), 'w') as f:
@@ -146,7 +144,7 @@ with open(join(test_dir, 'wav.scp.unsorted'), 'w') as f:
         for utt in spk2utt[spk]:
             f.write(utt + ' ' + utt2wav[utt] + '\n')
 
-print "Finished creating test dir."
+print("Finished creating test dir.")
 
 os.makedirs(dev_dir)
 with open(join(dev_dir, 'spk2utt.unsorted'), 'w') as f:
@@ -171,7 +169,7 @@ with open(join(dev_dir, 'wav.scp.unsorted'), 'w') as f:
     for utt in dev_utts:
         f.write(utt + ' ' + utt2wav[utt] + '\n')
 
-print "Finished creating dev dir."
+print("Finished creating dev dir.")
 
 all_spks = list(spk2gender.keys())
 all_utts = list(utt2spk.keys())
@@ -179,7 +177,7 @@ train_spks = [spk for spk in all_spks if spk not in test_spks and spk not in
                 dev_spks]
 train_utts = [utt for utt in all_utts if utt2spk[utt] not in test_spks and
                 utt not in dev_utts]
-print "Selected", len(train_spks), "train speakers and", len(train_utts), "train utterances."
+print("Selected", len(train_spks), "train speakers and", len(train_utts), "train utterances.")
 
 os.makedirs(train_dir)
 with open(join(train_dir, 'spk2utt.unsorted'), 'w') as f:
@@ -203,4 +201,4 @@ with open(join(train_dir, 'wav.scp.unsorted'), 'w') as f:
     for utt in train_utts:
         f.write(utt + ' ' + utt2wav[utt] + '\n')
 
-print "Finished creating train dir."
+print("Finished creating train dir.")
