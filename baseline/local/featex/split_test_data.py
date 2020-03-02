@@ -30,11 +30,16 @@ if not exists(out_ppg_dir):
 
 with open(test_file) as f:
     for line in f.read().splitlines():
-        os.rename(join(xvector_dir, line+'.xvector'), join(out_xvector_dir,
-                                                           line+'.xvector'))
-        os.rename(join(f0_dir, line+'.f0'), join(out_f0_dir, line+'.f0'))
-        os.rename(join(mel_dir, line+'.mel'), join(out_mel_dir, line+'.mel'))
-        os.rename(join(ppg_dir, line+'.ppg'), join(out_ppg_dir, line+'.ppg'))
 
+        if not os.path.isfile(join(out_xvector_dir, line+'.xvector')):
+            os.rename(join(xvector_dir, line+'.xvector'), join(out_xvector_dir,
+                                                               line+'.xvector'))
 
+        if not os.path.isfile(join(out_f0_dir, line+'.f0')):
+            os.rename(join(f0_dir, line+'.f0'), join(out_f0_dir, line+'.f0'))
 
+        if not os.path.isfile(join(out_mel_dir, line+'.mel')):
+            os.rename(join(mel_dir, line+'.mel'), join(out_mel_dir, line+'.mel'))
+
+        if not os.path.isfile(join(out_ppg_dir, line+'.bn')):
+            os.rename(join(ppg_dir, line+'.bn'), join(out_ppg_dir, line+'.bn'))

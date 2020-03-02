@@ -95,7 +95,7 @@ fi
 # Create NetCDF data from each split
 if [ $stage -le 5 ]; then
   echo "Stage 5: Making netcdf data for AM & NSF training."
-  local/featex/03_make_am_nsf_netcdf_data.sh ${train_split} ${dev_split} ${test_split} \
+  local/featex/03_make_am_nsf_netcdf_data.sh ${split_dir}/${train_split} ${split_dir}/${dev_split} ${split_dir}/${test_split} \
 	  pchampio/exp/${train_data}_hires/dump_eproj ${melspec_file} \
 	  ${xvec_out_dir} ${train_out} ${test_out}
 fi

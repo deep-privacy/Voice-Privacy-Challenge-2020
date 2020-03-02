@@ -3,7 +3,7 @@
 . path.sh
 . cmd.sh
 
-stage=0
+stage=3
 
 . utils/parse_options.sh
 

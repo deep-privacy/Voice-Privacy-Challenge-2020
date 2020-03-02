@@ -93,6 +93,7 @@ if [ $stage -le 4 ]; then
     ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
     ${data_netcdf}/${data_dir} || exit 1;
 fi
+exit ;
 
 if [ $stage -le 5 ]; then
   printf "${RED}\nStage a.5: Extract melspec from acoustic model for ${data_dir}.${NC}\n"

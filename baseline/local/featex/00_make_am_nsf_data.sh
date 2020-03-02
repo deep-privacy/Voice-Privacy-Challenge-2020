@@ -28,7 +28,7 @@ train_dir=$out_dir/$(basename $in_dir)_train
 dev_dir=$out_dir/$(basename $in_dir)_dev
 test_dir=$out_dir/$(basename $in_dir)_test
 
-echo "Sorting : ${train_dir}, ${dev_dir} and ${test_dir}" 
+echo "Sorting : ${train_dir}, ${dev_dir} and ${test_dir}"
 
 for f in `ls ${train_dir}`; do
   echo "Sorting $f"

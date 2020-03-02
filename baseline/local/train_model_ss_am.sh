@@ -23,10 +23,8 @@ stage=0
 . utils/parse_options.sh
 
 if [ $stage -le 0 ]; then
-  if [ ! -f data/$am_nsf_train_data/wav.scp ]; then
-    echo "Data prep of $am_nsf_train_data"
-    local/data_prep_libritts.sh ${libritts_corpus}/train-clean-100 data/${am_nsf_train_data} || exit 1;
-  fi
+  echo "Data prep of $am_nsf_train_data"
+  local/data_prep_libritts.sh ${libritts_corpus}/train-clean-100 data/${am_nsf_train_data} || exit 1;
   local/run_prepfeats_am_nsf.sh \
 	--xvec-nnet-dir ${xvec_nnet_dir} \
 	${am_nsf_train_data} ${feats_out_dir} || exit 1;
