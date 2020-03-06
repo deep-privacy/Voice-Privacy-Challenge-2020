@@ -9,7 +9,10 @@ export TEMP_CURRENNT_PROJECT_PYTOOLS_PATH=${nii_dir}/pyTools
 export TEMP_CURRENNT_PROJECT_CURRENNT_PATH=${nii_dir}/CURRENNT_codes/build/currennt
 
 # PATH to SOX (http://sox.sourceforge.net/sox.html)
-export TEMP_CURRENNT_PROJECT_SOX_PATH=/home/pchampion/lab/espnet/tools/venv/bin/sox
+export TEMP_CURRENNT_PROJECT_SOX_PATH=/usr/bin/sox
+if [ $USER = "pchampion" ]; then
+  export TEMP_CURRENNT_PROJECT_SOX_PATH=/home/pchampion/lab/espnet/tools/venv/bin/sox
+fi
 
 # PATH to SV56 (a software to normalize waveform amplitude.
 #  https://www.itu.int/rec/T-REC-P.56
