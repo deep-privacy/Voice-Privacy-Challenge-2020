@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 # Copied from init.sh
 
 . path.sh
 . local/vc/nsf/init.sh
 
-# ----- Method 1 
+# ----- Method 1
 # For generation, you can configure config.py and run
 #python ../SCRIPTS/02_genwaveform.py config
 
@@ -40,5 +40,3 @@ export TEMP_WAVEFORM_TEMP_OUTPUT_DIRECTORY="${test_data_dir}/output_tmp"
 python ${proj_dir}/../SCRIPTS/02_genwaveform.py config_libri_nsf
 
 rm -r ${TEMP_WAVEFORM_TEMP_OUTPUT_DIRECTORY}
-
-

@@ -80,7 +80,7 @@ upsampling_rate = 160
 #  Note: the example data are stored in wav32k because they are indeed 32k waveforms,
 #        but you can use 48k, 16k waveforms and store them in directories with different names.
 #        The script will automatically do downsampling
-path_waveform = tmp_path + os.path.sep + 'wav24k'
+path_waveform = tmp_path + os.path.sep + 'wav'
 
 # waveform representation
 #  waveform_mu_law_bits = 10: 10 bits mu-law compression (for WaveNet)
@@ -89,8 +89,8 @@ waveform_mu_law_bits = -1
 
 # Set train/validation data list
 #  each list should be a list of file names (without file extension)
-trn_list = tmp_path + '/train_100/scp/train.lst'
-val_list = tmp_path + '/train_100/scp/dev.lst'
+trn_list = tmp_path + '/scp/train.lst'
+val_list = tmp_path + '/scp/dev.lst'
 # 
 # To randomly divide data into train/val, set trn_list = None and val_list = None
 #  and use the train_utts to divide the data
@@ -113,7 +113,8 @@ model_dir = prjdir + '/MODELS/h-sinc-NSF'
 network_name = 'network.jsn'
 
 # common network training config
-network_trn_config = 'train_config.cfg'
+
+network_trn_config = '../nii_scripts/waveform-modeling/project-NSF/'+'/train_config.cfg'
 
 
 # ----- Network generation configuration

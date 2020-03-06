@@ -11,7 +11,7 @@ set -e
 
 #===== begin config =======
 nj=20
-stage=3
+stage=5
 
 anoni_pool="libritts_train_other_500" # change this to the data you want to use for anonymization pool
 data_netcdf= # change this to dir where VC features data will be stored
@@ -93,7 +93,6 @@ if [ $stage -le 4 ]; then
     ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
     ${data_netcdf}/${data_dir} || exit 1;
 fi
-exit ;
 
 if [ $stage -le 5 ]; then
   printf "${RED}\nStage a.5: Extract melspec from acoustic model for ${data_dir}.${NC}\n"

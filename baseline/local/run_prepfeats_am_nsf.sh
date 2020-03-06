@@ -71,6 +71,7 @@ fi
 # Split the data into train, dev and test
 if [ $stage -le 2 ]; then
   echo "Stage 2: Splitting the data into train, dev and test based on speakers."
+  rm data/am_nsf_train/* -rf
   local/featex/00_make_am_nsf_data.sh --dev-spks ${dev_spks} --test-spks ${test_spks} \
 	  data/${train_data} ${split_dir}
 fi
@@ -80,7 +81,7 @@ if [ $stage -le 3 ]; then
   echo "Stage 3: x-vector extraction."
   for sdata in ${split_data}; do
     local/featex/01_extract_xvectors.sh --nj ${dev_spks} ${split_dir}/${sdata} ${xvec_nnet_dir} \
-	  ${xvec_out_dir}
+    ${xvec_out_dir}
   done
 fi
 

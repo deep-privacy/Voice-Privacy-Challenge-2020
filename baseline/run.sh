@@ -211,10 +211,10 @@ if [ $stage -le 9 ]; then
         cp data/$dset/trials data/$dset$anon_data_suffix/ || exit 1
       fi
       rand_seed=$((rand_seed+1))
+      exit 1;
     done
   done
 fi
-exit 0;
 
 # Make VCTK anonymized evaluation subsets
 if [ $stage -le 10 ]; then
