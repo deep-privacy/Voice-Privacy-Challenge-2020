@@ -17,9 +17,12 @@ The recipe uses the pre-trained models of anonymization. To run the baseline sys
 
 ## General information
 
-For more details about the baseline and data please see [The VoicePrivacy 2020 Challenge Evaluation Plan](https://www.voiceprivacychallenge.org/docs/VoicePrivacy_2020_Eval_Plan_v1_1.pdf)
+For more details about the baseline and data, please see [The VoicePrivacy 2020 Challenge Evaluation Plan](https://www.voiceprivacychallenge.org/docs/VoicePrivacy_2020_Eval_Plan_v1_1.pdf)
 
-### Datasets
+For the latest updates in the baseline and evaluation scripts, please visit [News and updates page](https://github.com/Voice-Privacy-Challenge/Voice-Privacy-Challenge-2020/wiki/News-and-Updates)
+
+
+## Data
 
 #### Training data
 The dataset for anonymization system traing consists of subsets from the following corpora*:
@@ -33,7 +36,6 @@ The dataset for anonymization system traing consists of subsets from the followi
 * [VCTK](https://datashare.is.ed.ac.uk/handle/10283/3443) - subsets vctk_dev and vctk_test are download from server in run.sh
 * [LibriSpeech](http://www.openslr.org/12/) - subsets libri_dev and libri_test are download from server in run.sh
 
-*vctk_test and libri_test will be available to download after the specifed deadline
 
 ##  Baseline-1: Anonymization  using x-vectors and neural waveform models 
 
@@ -71,6 +73,7 @@ Please see
 * [RESULTS for Baseline-2](https://github.com/Voice-Privacy-Challenge/Voice-Privacy-Challenge-2020/blob/master/baseline/RESULTS_mcadams) 
 
 for the evalation and development data sets.
+
 
 
 ## Organizers (in alphabetical order)
