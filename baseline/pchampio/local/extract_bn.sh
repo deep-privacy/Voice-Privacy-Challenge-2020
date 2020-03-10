@@ -6,7 +6,7 @@
 nj=32
 stage=0
 batchsize=2 # Tweak the batchsize depanding on the amount of GPU RAM
-gpu_id=0
+gpu_id=2
 fbank_conf=fbank.conf
 pitch_conf=pitch.conf
 
@@ -31,14 +31,13 @@ data_dir=${work_dir}/data/${data}_hires
 
 # Trained with
 # train_600 is used for Speech and Text seq2seq training!
-### ./run.sh --train-config $(~/lab/espnet/utils/change_yaml.py conf/train.yaml -a eprojs=256 -a elayers=4 -a subsample='1_2_1_1' -a epochs=15 -a dunits=512) --stage 4 --DAMPED_active_branch false --DAMPED_N_DOMAIN 0 --TRAIN_SET train_600
+### ./run.sh --train-config $(~/lab/espnet/utils/change_yaml.py conf/train.yaml -a eprojs=256 -a elayers=5 -a subsample='1_1_1_1_1' -a epochs=15 -a dunits=512) --stage 4 --DAMPED_active_branch false --DAMPED_N_DOMAIN 0 --TRAIN_SET train_600 --resume ''
 # Results
 ## train_600_pytorch_train_eprojs256_elayers4_subsample1_2_1_1_epochs15_dunits512_run.sh
 ### WER
 # | dataset                                    | Snt  | Wrd   | Corr | Sub  | Del | Ins | Err  | S.Err |
 # | ---                                        | ---  | ---   | ---  | ---  | --- | --- | ---  | ---   |
-# | decode_test_clean_snapshot.ep.15_decode_lm | 2620 | 52576 | 95.2 | 4.3  | 0.4 | 0.7 | 5.4  | 49.7  |
-# | decode_test_other_snapshot.ep.15_decode_lm | 2939 | 52343 | 88.6 | 10.2 | 1.3 | 1.6 | 13.0 | 70.4  |
+# | decode_test_other_snapshot.ep.15_decode_lm | 2939 | 52343 | 88.0 | 10.6 | 1.4 | 1.7 | 13.6 | 71.7  |
 
 espnet_libri_egs=$ESPNET_PATH/egs/librispeech/asr1
 
@@ -54,7 +53,8 @@ bpemodel=$espnet_libri_egs/data/lang_char/train_960_unigram${nbpe}
 decode_config=$espnet_libri_egs/conf/decode.yaml
 
 # Acoustic model
-am_model_arch=train_600_pytorch_train_eprojs256_elayers4_subsample1_2_1_1_epochs15_dunits512_run.sh
+# am_model_arch=train_600_pytorch_train_eprojs256_elayers4_subsample1_2_1_1_epochs15_dunits512_run.sh
+am_model_arch=train_600_pytorch_train_eprojs256_elayers5_subsample1_1_1_1_1_epochs15_dunits512_run.sh
 am_model=snapshot.ep.15
 am_model_fullpath=$espnet_libri_egs/exp/$am_model_arch/results/$am_model
 lm_model=$espnet_libri_egs/
@@ -84,10 +84,10 @@ feat_recog_dir=${work_dir}/dump/${data}; mkdir -p ${feat_recog_dir}
 recog_log_dir=${work_dir}/exp/${data}_hires/decode
 
 
-if [ -f $recog_log_dir/result.txt ]; then
-  printf "${CYAN}\nStage pchampio: ${RED} Skiping ${data} (already extracted).${NC}\n"
-  exit 0;
-fi
+# if [ -f $recog_log_dir/result.txt ]; then
+  # printf "${CYAN}\nStage pchampio: ${RED} Skiping ${data} (already extracted).${NC}\n"
+  # exit 0;
+# fi
 
 
 if [ $stage -le 0 ]; then

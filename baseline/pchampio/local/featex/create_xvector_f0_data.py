@@ -38,7 +38,7 @@ with ReadHelper('scp:'+pitch_file) as reader:
         ubsamp_facor = math.ceil(yaapt_f0.shape[0]/len(bn))
         bn_up_rep = np.repeat(bn, ubsamp_facor, axis=0)
         bn_up = bn_up_rep[:kaldi_f0.shape[0]]
-        #  print(f"Repeating ESPnet bn-features (dim:{len(bn)}) vector into vector of dim:{yaapt_f0.shape[0]}, subsamp_facor: {ubsamp_facor} | kaldi shape: {kaldi_f0.shape[0]}")
+        print(f"Repeating ESPnet bn-features (dim:{len(bn)}) vector into vector of dim:{yaapt_f0.shape[0]}, subsamp_facor: {ubsamp_facor} | kaldi shape: {kaldi_f0.shape[0]}")
         readwrite.write_raw_mat(bn_up, join(out_dir, 'ppg', key+'.bn'))
 
 

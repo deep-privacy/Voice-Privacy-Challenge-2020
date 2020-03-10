@@ -4,6 +4,7 @@
 . local/vc/am/init.sh
 
 export AM_NSF_FEAT_OUT="$1"
+export CUDA_VISIBLE_DEVICES=1
 
 proj_dir=${nii_scripts}/acoustic-modeling/project-DAR-continuous
 
