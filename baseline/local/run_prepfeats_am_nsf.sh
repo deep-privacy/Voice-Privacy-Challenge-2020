@@ -56,6 +56,12 @@ test_out=${feat_out_dir}/am_nsf_test # change this to dir where test data will b
 # Extract PPG using chain model
 if [ $stage -le 0 ]; then
   echo "Stage 0: PPG extraction."
+  # Extract train_data (libritts_train_clean_100 PPGs)
+  # exp/models/1_asr_am/exp/nnet3_cleaned/libritts_train_clean_100
+  # local/featex/extract_ppg.sh --nj $nj --stage 0 ${train_data} \
+        # exp/models/1_asr_am/exp exp/models/1_asr_am/exp/nnet3_cleaned/${train_data}
+  # exit 0;
+
   pchampio/local/extract_bn.sh --nj $nj --stage 0 \
   --fbank-conf fbank_libriTTS.conf \
   --pitch-conf pitch_libriTTS.conf \
@@ -89,7 +95,7 @@ fi
 if [ $stage -le 4 ]; then
   echo "Stage 4: Pitch extraction."
   for sdata in ${split_data}; do
-    local/featex/02_extract_pitch.sh --nj ${dev_spks} ${split_dir}/${sdata}
+    local/featex/02_extract_pitch.sh --pitch-conf pchampio/conf/pitch_libriTTS.conf --nj ${dev_spks} ${split_dir}/${sdata}
   done
 fi
 

@@ -4,6 +4,7 @@
 . cmd.sh
 
 nj=20
+pitch_config=conf/pitch.conf
 
 . utils/parse_options.sh
 
@@ -18,5 +19,5 @@ fi
 data_dir=$1
 pitch_dir=${data_dir}/pitch
 
-local/featex/make_pitch.sh --nj $nj --pitch-config pchampio/conf/pitch_libriTTS.conf --cmd "$train_cmd" ${data_dir} \
+local/featex/make_pitch.sh --nj $nj --pitch-config $pitch_config --cmd "$train_cmd" ${data_dir} \
 	exp/make_pitch ${pitch_dir}
