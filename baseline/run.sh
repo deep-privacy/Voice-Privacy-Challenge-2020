@@ -25,7 +25,7 @@ set -e
 
 nj=$(nproc)
 mcadams=false
-stage=9
+stage=8
 
 download_full=true  # If download_full=true all the data that can be used in the training/development will be dowloaded (except for Voxceleb-1,2 corpus); otherwise - only those subsets that are used in the current baseline (with the pretrained models)
 data_url_librispeech=www.openslr.org/resources/12  # Link to download LibriSpeech corpus
