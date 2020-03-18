@@ -32,6 +32,13 @@ data_dir=${work_dir}/data/${data}_hires
 # Trained with
 # train_600 is used for Speech and Text seq2seq training!
 ### ./run.sh --train-config $(~/lab/espnet/utils/change_yaml.py conf/train.yaml -a eprojs=256 -a elayers=3 -a subsample='1_1_1' -a epochs=15 -a dunits=512) --stage 4 --DAMPED_active_branch false --DAMPED_N_DOMAIN 0 --TRAIN_SET train_600 --resume '' --RECOG_SET 'test_other'
+### Results:
+### WER
+# | dataset                                    | Snt  | Wrd   | Corr | Sub  | Del | Ins | Err  | S.Err |
+# | ---                                        | ---  | ---   | ---  | ---  | --- | --- | ---  | ---   |
+# | decode_test_clean_model.acc.best_decode_lm | 2620 | 52576 | 93.6 | 5.8  | 0.6 | 1.0 | 7.4  | 60.2  |
+# | decode_test_other_model.acc.best_decode_lm | 2939 | 52343 | 84.8 | 13.5 | 1.7 | 2.6 | 17.9 | 79.9  |
+
 espnet_libri_egs=$ESPNET_PATH/egs/librispeech/asr1
 
 # CMVN are computed globaly on librispeech default train set
