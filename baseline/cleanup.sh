@@ -62,7 +62,28 @@ vctk_test_trials_m_all
 vctk_test_trials_m_all_anon
 vctk_test_trials_m_anon
 vctk_test_trials_m_common
-vctk_test_trials_m_common_anon'
+vctk_test_trials_m_common_anon
+libri_dev_trials_f_hires   
+libri_test_asr_hires       
+vctk_dev_asr_hires                  
+vctk_test_trials_f_all_hires
+libri_dev_asr_anon_hires  
+libri_dev_trials_m_hires   
+libri_test_enrolls_hires     
+vctk_dev_enrolls_hires     
+vctk_test_asr_anon_hires
+vctk_test_trials_m_all_hires
+libri_dev_asr_hires 
+libri_test_trials_f_hires          
+vctk_dev_trials_f_all_hires  
+vctk_test_asr_hires
+libri_dev_enrolls_hires
+libri_test_asr_anon_hires
+libri_test_trials_m_hires
+vctk_dev_asr_anon_hires
+vctk_dev_trials_m_all_hires 
+vctk_test_enrolls_hires'
+
 
 for name in $names; do
   dir=data/$name
@@ -221,5 +242,8 @@ for name in $names; do
   #[ ! -d $dir ] && echo $dir
   if [ -d $dir ]; then echo $dir; rm -r $dir; fi
 done
+
+dir="exp/tmp"
+if [ -d $dir ]; then echo $dir; rm -r $dir; fi
 
 echo Done
