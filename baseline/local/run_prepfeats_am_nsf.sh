@@ -95,7 +95,7 @@ fi
 if [ $stage -le 4 ]; then
   echo "Stage 4: Pitch extraction."
   for sdata in ${split_data}; do
-    local/featex/02_extract_pitch.sh --pitch-conf pchampio/conf/pitch_libriTTS.conf --nj ${dev_spks} ${split_dir}/${sdata}
+    local/featex/02_extract_pitch.sh --pitch-config pchampio/conf/pitch_libriTTS.conf --nj ${dev_spks} ${split_dir}/${sdata}
   done
 fi
 

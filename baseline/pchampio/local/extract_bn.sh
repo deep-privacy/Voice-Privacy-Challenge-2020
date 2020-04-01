@@ -6,7 +6,6 @@
 nj=32
 stage=0
 batchsize=1 # Tweak the batchsize depanding on the amount of GPU RAM
-gpu_id=1
 fbank_conf=fbank.conf
 pitch_conf=pitch.conf
 
@@ -32,6 +31,7 @@ data_dir=${work_dir}/data/${data}_hires
 # Trained with
 # train_600 is used for Speech and Text seq2seq training!
 ### ./run.sh --train-config $(~/lab/espnet/utils/change_yaml.py conf/train.yaml -a eprojs=256 -a elayers=3 -a subsample='1_1_1' -a epochs=15 -a dunits=512) --stage 4 --DAMPED_active_branch false --DAMPED_N_DOMAIN 0 --TRAIN_SET train_600 --resume '' --RECOG_SET 'test_other'
+### fine tuned with ./run.sh --train-config ./conf/train_eprojs256_elayers3_subsample1_1_1_epochs15_dunits512.yaml --stage 4 --TRAIN_SET train_loc_60 --resume 'snapshot.ep.41' --RECOG_SET 'test_other'
 ### Results:
 ### WER
 # | dataset                                    | Snt  | Wrd   | Corr | Sub  | Del | Ins | Err  | S.Err |
@@ -53,15 +53,9 @@ bpemodel=$espnet_libri_egs/data/lang_char/train_960_unigram${nbpe}
 decode_config=$espnet_libri_egs/conf/decode.yaml
 
 # Acoustic model
-am_model_arch=train_600_pytorch_train_eprojs256_elayers3_subsample1_1_1_epochs15_dunits512_run.sh
-am_model=model.acc.best
+am_model_arch=train_loc_60_pytorch_train_eprojs256_elayers3_subsample1_1_1_epochs15_dunits512_run.sh
+am_model=snapshot.ep.41
 am_model_fullpath=$espnet_libri_egs/exp/$am_model_arch/results/$am_model
-lm_model=$espnet_libri_egs/
-
-# LM model
-lang_model_arch=train_rnnlm_pytorch_lm_unigram5000
-lang_model=rnnlm.model.best
-lang_model_fullpath=$espnet_libri_egs/exp/$lang_model_arch/$lang_model
 
 # Damped
 DAMPED_damped_dir='/home/pchampion/lab/damped'
@@ -113,22 +107,38 @@ dump_eproj=${work_dir}/exp/${data}_hires/dump_eproj; mkdir -p $dump_eproj
 
 if [ $stage -le 1 ]; then
   printf "${CYAN}\nStage pchampio: BN extraction for ${data} using pre-trained ESPnet model.${NC}\n"
-  printf " Log: ${recog_log_dir}/recog.log\n"
 
-  $train_cmd ${recog_log_dir}/recog.log \
-    DAMPED_N_DOMAIN=0 DAMPED_D_task='spk' DAMPED_damped_dir=$DAMPED_damped_dir \
-    DAMPED_save_uttid_eproj=$dump_eproj \
-    CUDA_VISIBLE_DEVICES=$gpu_id \
-      asr_recog.py \
-        --config ${decode_config} \
-        --ngpu 1 \
-        --backend pytorch \
-        --batchsize $batchsize \
-        --recog-json ${feat_recog_dir}/data.json \
-        --result-label ${recog_log_dir}/data.recog-result.json \
-        --model ${am_model_fullpath}  \
-        --rnnlm ${lang_model_fullpath}
+  ngpu=1
+  # obtain the number of GPUs on the node
+  which nvidia-smi >/dev/null 2>&1; if [ $? -eq 0 ]; then ngpu=$(nvidia-smi --query-gpu=name --format=csv,noheader | wc -l); fi
 
-  score_sclite.sh --bpe ${nbpe} --bpemodel ${bpemodel}.model --wer true ${recog_log_dir} ${dict}
+  # split data
+  splitjson.py --parts ${ngpu} ${feat_recog_dir}/data.json
+
+  pids=() # initialize pids
+  for JOB in $(seq 1 $ngpu); do
+  (
+    printf " Log: ${recog_log_dir}/recog.${JOB}.log\n"
+
+    $train_cmd ${recog_log_dir}/recog.${JOB}.log \
+      DAMPED_N_DOMAIN=0 DAMPED_D_task='spk' DAMPED_damped_dir=$DAMPED_damped_dir \
+      DAMPED_save_uttid_eproj=$dump_eproj \
+      CUDA_VISIBLE_DEVICES=$(($JOB - 1)) \
+        asr_recog.py \
+          --config ${decode_config} \
+          --ngpu 1 \
+          --backend pytorch \
+          --batchsize $batchsize \
+          --recog-json ${feat_recog_dir}/split${ngpu}utt/data.${JOB}.json \
+          --result-label ${recog_log_dir}/data.recog-result.${JOB}.json \
+          --model ${am_model_fullpath}
+
+    score_sclite.sh --bpe ${nbpe} --bpemodel ${bpemodel}.model --wer true ${recog_log_dir} ${dict}
+  ) &
+  pids+=($!) # store background pids
+  done
+  i=0; for pid in "${pids[@]}"; do wait ${pid} || ((++i)); done
+  [ ${i} -gt 0 ] && echo "$0: ${i} background jobs are failed." && false
+  echo "Finished"
 
 fi

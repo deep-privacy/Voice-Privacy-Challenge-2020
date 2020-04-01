@@ -27,7 +27,7 @@ nj=$(nproc)
 mcadams=false
 stage=9
 
-download_full=true  # If download_full=true all the data that can be used in the training/development will be dowloaded (except for Voxceleb-1,2 corpus); otherwise - only those subsets that are used in the current baseline (with the pretrained models)
+download_full=false  # If download_full=true all the data that can be used in the training/development will be dowloaded (except for Voxceleb-1,2 corpus); otherwise - only those subsets that are used in the current baseline (with the pretrained models)
 data_url_librispeech=www.openslr.org/resources/12  # Link to download LibriSpeech corpus
 data_url_libritts=www.openslr.org/resources/60     # Link to download LibriTTS corpus
 corpora=corpora
@@ -229,7 +229,7 @@ if [ $stage -le 9 ]; then
         --anon-xvec-out-dir $anon_xvec_out_dir --plda-dir $xvec_nnet_dir \
         --pseudo-xvec-rand-level $pseudo_xvec_rand_level --distance $distance \
         --proximity $proximity --cross-gender $cross_gender \
-        --rand-seed $rand_seed \
+	      --rand-seed $rand_seed \
         --anon-data-suffix $anon_data_suffix $dset || exit 1;
     fi
     if [ -f data/$dset/enrolls ]; then
@@ -241,6 +241,7 @@ if [ $stage -le 9 ]; then
     rand_seed=$((rand_seed+1))
   done
 fi
+exit
 
 # Make VCTK anonymized evaluation subsets
 if [ $stage -le 10 ]; then

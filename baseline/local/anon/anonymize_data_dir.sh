@@ -11,7 +11,7 @@ set -e
 
 #===== begin config =======
 nj=20
-stage=0
+stage=3
 
 anoni_pool="libritts_train_other_500" # change this to the data you want to use for anonymization pool
 data_netcdf= # change this to dir where VC features data will be stored
@@ -82,16 +82,24 @@ fi
 # Extract BNs for source data
 if [ $stage -le 3 ]; then
   printf "${RED}\nStage a.3: BN extraction for ${data_dir}.${NC}\n"
-  pchampio/local/extract_bn.sh ${data_dir}
+  # pchampio/local/extract_bn.sh ${data_dir}
+
+  printf "${RED}\nStage a.3: PPG extraction for ${data_dir}.${NC}\n"
+    local/featex/extract_ppg.sh --nj $nj --stage 0 \
+	  ${data_dir} ${ppg_model} ${ppg_dir}/ppg_${data_dir} || exit 1;
 fi
 
 # Create netcdf data for voice conversion
 if [ $stage -le 4 ]; then
   printf "${RED}\nStage a.4: Make netcdf data for VC.${NC}\n"
 
-  pchampio/local/make_netcdf.sh data/${data_dir} ${data_dir} \
-    ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
-    ${data_netcdf}/${data_dir} || exit 1;
+  local/anon/make_netcdf.sh --stage 0 data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
+	  ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
+	  ${data_netcdf}/${data_dir} || exit 1;
+
+  # pchampio/local/make_netcdf.sh data/${data_dir} ${data_dir} \
+    # ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
+    # ${data_netcdf}/${data_dir} || exit 1;
 fi
 
 if [ $stage -le 5 ]; then
