@@ -37,7 +37,11 @@ export TEMP_WAVEFORM_MODEL_NETWORK_PATH=exp/models/4_nsf/trained_network.jsn
 # Path to a temporary directory to save intermediate files (which will be deleted after generation)
 export TEMP_WAVEFORM_TEMP_OUTPUT_DIRECTORY="${test_data_dir}/output_tmp"
 
+temp_dir="exp/tmp"
+mkdir -p $temp_dir
+export TEMP_ADDITIONAL_COMMAND="--cache_path $temp_dir"
+
 # generating
-python ${proj_dir}/../SCRIPTS/02_genwaveform.py config_libri_nsf
+python ${proj_dir}/../SCRIPTS/02_genwaveform.py config_libri_nsf || exit 1
 
 rm -r ${TEMP_WAVEFORM_TEMP_OUTPUT_DIRECTORY}
