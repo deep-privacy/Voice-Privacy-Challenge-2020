@@ -21,18 +21,8 @@ stage=1
 . utils/parse_options.sh
 
 if [ $stage -le 0 ]; then
-  if [ ! -f /tmp/cache/${am_nsf_train_data}/wav.scp ]; then
-    echo "Data prep of $am_nsf_train_data"
-    local/data_prep_libritts.sh ${libritts_corpus}/train-clean-100 data/${am_nsf_train_data} || exit 1;
-    mkdir -p /tmp/cache
-    cp -r data/${am_nsf_train_data} /tmp/cache
-  else
-    echo "Copy data of $am_nsf_train_data from cache"
-    cp -r /tmp/cache/${am_nsf_train_data}/* data/${am_nsf_train_data}
-  fi
-  local/run_prepfeats_am_nsf.sh \
-	--xvec-nnet-dir ${xvec_nnet_dir} \
-	${am_nsf_train_data} ${feats_out_dir} || exit 1;
+  pchampio/local/run_prepfeats_nsf.sh \
+	${feats_out_dir} || exit 1;
 
   cat data/${am_nsf_train_data}/wav.scp | awk -v fo="$feats_out_dir" '{print "ln -s " $2, fo"/am_nsf_train/wav/"$1".wav\0"}' | xargs -0 bash -c
 fi

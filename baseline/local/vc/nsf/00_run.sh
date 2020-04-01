@@ -6,6 +6,8 @@
 export AM_NSF_FEAT_OUT="$1"
 export CUDA_VISIBLE_DEVICES=1
 
+export PCHAMP_TRAIN=1
+
 proj_dir=${nii_scripts}/waveform-modeling/project-NSF
 
 # preparing data

@@ -54,6 +54,13 @@ path_acous_feats = [tmp_path + os.path.sep + 'mel',
                     tmp_path + os.path.sep + 'xvector',
                     tmp_path + os.path.sep + 'f0',]
 
+# Uses the output of the ss_am (model 3) to train the nsf model
+if os.getenv('PCHAMP_TRAIN') is not None:
+    print("INFO: Using mel features from ss_am acoustic model")
+    path_acous_feats = [tmp_path + os.path.sep + 'am_out_mel',
+                        tmp_path + os.path.sep + 'xvector',
+                        tmp_path + os.path.sep + 'f0',]
+
 # dimension of acoustic features
 #  [dim_of_feature1, dim_of_feature2, ..., dim_of_feature_N]
 dim_acous_feats = [80, 512, 1]
