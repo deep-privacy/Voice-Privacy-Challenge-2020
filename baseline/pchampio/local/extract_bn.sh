@@ -133,7 +133,7 @@ if [ $stage -le 1 ]; then
           --result-label ${recog_log_dir}/data.recog-result.${JOB}.json \
           --model ${am_model_fullpath}
 
-    score_sclite.sh --bpe ${nbpe} --bpemodel ${bpemodel}.model --wer true ${recog_log_dir} ${dict}
+    # score_sclite.sh --bpe ${nbpe} --bpemodel ${bpemodel}.model --wer true ${recog_log_dir} ${dict}
   ) &
   pids+=($!) # store background pids
   done

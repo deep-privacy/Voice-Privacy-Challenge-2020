@@ -11,7 +11,7 @@ set -e
 
 #===== begin config =======
 nj=20
-stage=3
+stage=6
 
 anoni_pool="libritts_train_other_500" # change this to the data you want to use for anonymization pool
 data_netcdf= # change this to dir where VC features data will be stored

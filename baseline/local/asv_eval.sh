@@ -25,25 +25,23 @@ for name in $asv_eval_model/final.raw $plda_dir/plda $plda_dir/mean.vec \
   [ ! -f $name ] && echo "File $name does not exist" && exit 1
 done
 
+nj=64
+
 for dset in $enrolls $trials; do
   data=data/$dset
   spk2utt=$data/spk2utt
   [ ! -f $spk2utt ] && echo "File $spk2utt does not exist" && exit 1
   num_spk=$(wc -l < $spk2utt)
   njobs=$([ $num_spk -le $nj ] && echo $num_spk || echo $nj)
-  if [ ! -f $data/.done_mfcc ]; then
     printf "${RED}  compute MFCC: $dset${NC}\n"
     steps/make_mfcc.sh --nj $njobs --cmd "$train_cmd" \
       --write-utt2num-frames true $data || exit 1
     utils/fix_data_dir.sh $data || exit 1
     touch $data/.done_mfcc
-  fi
-  if [ ! -f $data/.done_vad ]; then
     printf "${RED}  compute VAD: $dset${NC}\n"
     sid/compute_vad_decision.sh --nj $njobs --cmd "$train_cmd" $data || exit 1
     utils/fix_data_dir.sh $data || exit 1
     touch $data/.done_vad
-  fi
 done
 
 for dset in $enrolls $trials; do
@@ -53,16 +51,13 @@ for dset in $enrolls $trials; do
   num_spk=$(wc -l < $spk2utt)
   njobs=$([ $num_spk -le $nj ] && echo $num_spk || echo $nj)
   expo=$asv_eval_model/xvect_$dset
-  if [ ! -f $expo/.done ]; then
     printf "${RED}  compute x-vect: $dset${NC}\n"
     sid/nnet3/xvector/extract_xvectors.sh --nj $njobs --cmd "$train_cmd" \
       $asv_eval_model $data $expo || exit 1
     touch $expo/.done
-  fi
 done
 
 expo=$results/ASV-$enrolls-$trials
-if [ ! -f $expo/.done ]; then
   printf "${RED}  ASV scoring: $expo${NC}\n"
   mkdir -p $expo
   xvect_enrolls=$asv_eval_model/xvect_$enrolls/xvector.scp
@@ -86,4 +81,3 @@ if [ ! -f $expo/.done ]; then
   PYTHONPATH=$(realpath ../cllr) python ../cllr/compute_cllr.py \
     -k data/$trials/trials -s $expo/scores -e | tee $expo/Cllr || exit 1
   touch $expo/.done
-fi

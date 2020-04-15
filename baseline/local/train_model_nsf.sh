@@ -35,5 +35,5 @@ fi
 if [ $stage -le 2 ]; then
   echo "copy model in pchampio/models/4_nsf"
   mkdir pchampio/models/4_nsf -p
-  cp -r ${nii_scripts}/waveform-modeling/project-NSF/MODELS/h-sinc-NSF/ pchampio/models/4_nsf
+  cp ${nii_scripts}/waveform-modeling/project-NSF/MODELS/h-sinc-NSF/* pchampio/models/4_nsf
 fi

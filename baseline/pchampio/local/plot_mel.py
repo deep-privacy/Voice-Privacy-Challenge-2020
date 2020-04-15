@@ -4,7 +4,7 @@ from ioTools import readwrite
 import sys
 from os.path import join
 
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 
 args = sys.argv
@@ -15,7 +15,7 @@ filter_banks = readwrite.read_raw_mat(join(mspec_file, key), 80)
 
 print("Shape:", filter_banks.shape)
 
-plt.imshow(filter_banks.T, cmap=plt.cm.jet, extent=[0, filter_banks.shape[0], 0, filter_banks.shape[1]])
+plt.imshow(np.flipud(filter_banks.T), cmap=plt.cm.jet, extent=[0, filter_banks.shape[0], 0, filter_banks.shape[1]])
 plt.xlabel("Frames", fontsize=9, color='gray')
 plt.ylabel('Filter banks (80)', fontsize=9, color='gray')
 plt.title('Audio Spectrogram (dB)', fontsize=12, color='gray')
