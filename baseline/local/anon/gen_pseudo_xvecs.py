@@ -1,4 +1,5 @@
 import sys
+import os
 from os.path import basename, join
 import operator
 
@@ -44,7 +45,8 @@ def select_random_xvec(top500, pool_xvectors):
         pseudo_spk_matrix[i, :] = pool_xvectors[spk_aff[0]]
     # Take mean of 100 randomly selected xvectors
     pseudo_xvec = np.mean(pseudo_spk_matrix, axis=0)
-    return pseudo_xvec
+    #  return pseudo_xvec
+    return pool_xvectors[top500[0][0]], top500[0]
 
 
 gender_rev = {'m': 'f', 'f': 'm'}
@@ -143,7 +145,13 @@ ark_scp_output = 'ark,scp:{}/{}.ark,{}/{}.scp'.format(
                     pseudo_xvecs_dir, 'pseudo_xvector')
 with WriteHelper(ark_scp_output) as writer:
       for uttid, xvec in pseudo_xvec_map.items():
-          writer(uttid, xvec)
+          writer(uttid, xvec[0])
+          p = join(pseudo_xvecs_dir, "selected_x_vec")
+          if not os.path.exists(p):
+              os.mkdir(p)
+          with open(join(p, uttid), 'w') as file:
+            print(uttid, ":", xvec[1])
+            file.write(str(xvec[1][0]))
 
 print("Writing pseudo-speaker spk2gender.")
 with open(join(pseudo_xvecs_dir, 'spk2gender'), 'w') as f:

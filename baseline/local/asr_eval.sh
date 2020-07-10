@@ -5,7 +5,7 @@ set -e
 . path.sh
 . cmd.sh
 
-nj=$(nproc)
+nj=30
 dset=vctk_dev_trials_f_all
 model=exp/models/asr_eval
 printf -v results '%(%Y-%m-%d-%H-%M-%S)T' -1

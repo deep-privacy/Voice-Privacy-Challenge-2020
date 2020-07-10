@@ -6,7 +6,7 @@
 stage=0
 data="libri_dev_enrolls"
 uttid="1272-128104-0000"
-data_file="am_nsf_data_pchampio_1"
+data_file="am_nsf_data"
 
 data_dir_out="${HOME}/tmp"
 output="$data_dir_out/${uttid}_vtlp.mel"

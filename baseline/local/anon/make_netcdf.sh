@@ -4,6 +4,8 @@
 . cmd.sh
 
 stage=0
+f0_mod=false
+skip_f0_xvector=0
 
 . utils/parse_options.sh
 
@@ -14,6 +16,9 @@ if [ $# != 4 ]; then
   echo "   --stage 0     # Number of CPUs to use for feature extraction"
   exit 1;
 fi
+
+# Debug example:
+# $ local/anon/make_netcdf.sh data/libri_dev_trials_f exp/models/1_asr_am/exp/nnet3_cleaned/ppg_libri_dev_trials_f/phone_post.scp exp/models/2_xvect_extr/exp/xvector_nnet_1a/anon/xvectors_libri_dev_trials_f/pseudo_xvecs/pseudo_xvector.scp /srv/storage/talc@talc-data.nancy/multispeech/calcul/users/pchampion/lab/voice_privacy/Voice-Privacy-Challenge-2020/baseline/exp/am_nsf_data/libri_dev_trials_f
 
 src_data=$1
 
@@ -38,7 +43,21 @@ if [ $stage -le 1 ]; then
 fi
 
 if [ $stage -le 2 ]; then
-  echo "Writing xvector and F0 for train."
-  python local/featex/create_xvector_f0_data.py ${src_data} ${xvector_file} ${out_dir} || exit 1;
+  if [ $skip_f0_xvector -le 1 ]; then
+    echo "Writing xvector and F0 for train."
+    python local/featex/create_xvector_f0_data.py ${src_data} ${xvector_file} ${out_dir} || exit 1;
+  fi
+
+  if $f0_mod; then
+    echo "Apply linear transformation on F0."
+    python pchampio/F0_mod/transform_f0_data.py ${src_data} ${xvector_file} ${out_dir} || exit 1;
+  fi
+
+  exit 0
 fi
 
+if [ $stage -le 3 ]; then
+  echo "Writing back original xvector for NSF."
+  python local/featex/copy_xvector_f0_data.py ${src_data} ${xvector_file} ${out_dir} || exit 1;
+  exit 0
+fi

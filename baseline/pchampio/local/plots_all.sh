@@ -13,7 +13,8 @@ set -o pipefail
 . utils/parse_options.sh
 
 
-for exp in "am_nsf_data_baseline" "am_nsf_data_asr_bn" "am_nsf_data_asr_adv_bn"; do
+# for exp in "am_nsf_data_baseline" "am_nsf_data_asr_bn" "am_nsf_data_asr_adv_bn"; do
+for exp in "am_nsf_data"; do
   ./pchampio/local/make_plot_mel.sh \
     --uttid 1462-170142-0000 \
     --data libri_dev_trials_f \

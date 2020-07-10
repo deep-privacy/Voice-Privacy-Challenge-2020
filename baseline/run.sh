@@ -356,6 +356,7 @@ if [ $stage -le 13 ]; then
   for dset in libri vctk; do
     for suff in dev test; do
       for data in ${dset}_${suff}_asr ${dset}_${suff}_asr$anon_data_suffix; do
+      # for data in ${dset}_${suff}_asr$anon_data_suffix; do
         printf "${GREEN}\nStage 13: Performing intelligibility assessment using ASR decoding on $dset...${NC}\n"
         local/asr_eval.sh --nj $nj --dset $data --model $asr_eval_model --results $results || exit 1;
       done
@@ -387,6 +388,8 @@ if [ $stage -le 14 ]; then
       echo "  $line" | tee -a $expo
     done < $name
   done
+
+  ./local/results_to_latex.py $results/results.txt
 fi
 
 echo Done
