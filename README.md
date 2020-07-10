@@ -17,7 +17,7 @@ The recipe uses the pre-trained models of anonymization. To run the baseline sys
 
 ## General information
 
-For more details about the baseline and data, please see [The VoicePrivacy 2020 Challenge Evaluation Plan](https://www.voiceprivacychallenge.org/docs/VoicePrivacy_2020_Eval_Plan_v1_2.pdf)
+For more details about the baseline and data, please see [The VoicePrivacy 2020 Challenge Evaluation Plan](https://www.voiceprivacychallenge.org/docs/VoicePrivacy_2020_Eval_Plan_v1_3.pdf)
 
 For the latest updates in the baseline and evaluation scripts, please visit [News and updates page](https://github.com/Voice-Privacy-Challenge/Voice-Privacy-Challenge-2020/wiki/News-and-Updates)
 
@@ -92,7 +92,7 @@ for the evalation and development data sets.
 - Xin Wang - NII, Japan
 - Junichi Yamagishi - NII, Japan and University of Edinburgh, UK
 
-Contact : voice.privacy.challenge@gmail.com
+Contact: organisers@lists.voiceprivacychallenge.org
 
 
 ## Acknowledgements
@@ -118,3 +118,26 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 ---------------------------------------------------------------------------
+
+## References
+```
+@article{tomashenko2020introducing,
+    title={Introducing the VoicePrivacy Initiative},
+    author={Natalia Tomashenko and Brij Mohan Lal Srivastava and Xin Wang and Emmanuel Vincent and Andreas Nautsch and Junichi Yamagishi and Nicholas Evans and Jose Patino and Jean-François Bonastre and Paul-Gauthier Noé and Massimiliano Todisco},
+    year={2020},
+    eprint={2005.01387},
+    archivePrefix={arXiv},
+    url={https://arxiv.org/pdf/2005.01387v2.pdf}
+}
+```
+
+```
+article{tomashenkovoiceprivacy,
+  title={The {VoicePrivacy} 2020 {Challenge} Evaluation Plan},
+  author={Tomashenko, Natalia and Srivastava, Brij Mohan Lal and Wang, Xin and Vincent, Emmanuel and Nautsch, Andreas and Yamagishi, Junichi and Evans, Nicholas and Patino, Jose and Bonastre, Jean-Fran{\c{c}}ois and No{\'e}, Paul-Gauthier and Todisco, Massimiliano},
+  url={https://www.voiceprivacychallenge.org/docs/VoicePrivacy_2020_Eval_Plan_v1_3.pdf},
+  year={2020}
+}
+```
+
+
