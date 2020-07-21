@@ -46,7 +46,7 @@ def select_random_xvec(top500, pool_xvectors):
     # Take mean of 100 randomly selected xvectors
     pseudo_xvec = np.mean(pseudo_spk_matrix, axis=0)
     #  return pseudo_xvec
-    return pool_xvectors[top500[0][0]], top500[0]
+    return pseudo_xvec, top500[0]
 
 
 gender_rev = {'m': 'f', 'f': 'm'}

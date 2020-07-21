@@ -11,7 +11,7 @@ set -e
 
 #===== begin config =======
 nj=20
-stage=1
+stage=0
 
 anoni_pool="libritts_train_other_500" # change this to the data you want to use for anonymization pool
 data_netcdf= # change this to dir where VC features data will be stored
@@ -80,10 +80,12 @@ if [ $stage -le 2 ]; then
 fi
 
 # Extract BNs for source data
-if [ $stage -le 3 ]; then
+ if [ $stage -le 3 ]; then
+  # # For end-to-end BN
   # printf "${RED}\nStage a.3: BN extraction for ${data_dir}.${NC}\n"
   # pchampio/local/extract_bn.sh ${data_dir}
 
+  # Original
   printf "${RED}\nStage a.3: PPG extraction for ${data_dir}.${NC}\n"
     local/featex/extract_ppg.sh --nj $nj --stage 0 \
     ${data_dir} ${ppg_model} ${ppg_dir}/ppg_${data_dir} || exit 1;
@@ -93,16 +95,25 @@ fi
 if [ $stage -le 4 ]; then
   printf "${RED}\nStage a.4: Make netcdf data for VC.${NC}\n"
 
-  local/anon/make_netcdf.sh data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
-    ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
-    ${data_netcdf}/${data_dir} || exit 1;
+  # Original
+  # local/anon/make_netcdf.sh data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
+    # ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
+    # ${data_netcdf}/${data_dir} || exit 1;
 
+  # # For end-to-end BN
   # pchampio/local/make_netcdf.sh data/${data_dir} ${data_dir} \
     # ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
     # ${data_netcdf}/${data_dir} || exit 1;
 
+
+  # # For f0 modification on nsf and ss_am models
+  local/anon/make_netcdf.sh --f0_mod true data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
+    ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
+    ${data_netcdf}/${data_dir} || exit 1;
+
 fi
 
+# # Write back original xvector
 # local/anon/make_netcdf.sh --stage 3 data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
   # ${anon_xvec_out_dir}/xvectors_${data_dir}/spk_xvector.scp \
   # ${data_netcdf}/${data_dir} || exit 1;
@@ -118,6 +129,7 @@ fi
     # ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
     # ${data_netcdf}/${data_dir} || exit 1;
 
+# # Write back original xvector only for NSF
   # local/anon/make_netcdf.sh data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
     # ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
     # ${data_netcdf}/${data_dir} || exit 1;
