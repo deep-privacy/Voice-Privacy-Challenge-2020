@@ -23,7 +23,7 @@ set -e
 
 #===== begin config =======
 
-nj=$(nproc)
+nj=64
 mcadams=false
 stage=9
 
@@ -221,6 +221,7 @@ if [ $stage -le 9 ]; then
         awk -F'[/.]' '{print $5 " sox " $0 " -t wav -R -b 16 - |"}' > data/$dset$anon_data_suffix/wav.scp
     else
       printf "${GREEN}\nStage 9: Anonymizing using x-vectors and neural wavform models...${NC}\n"
+      # dset=libri_train_clean_360
       local/anon/anonymize_data_dir.sh \
         --nj $nj --anoni-pool $anoni_pool \
         --data-netcdf $data_netcdf \
@@ -231,6 +232,7 @@ if [ $stage -le 9 ]; then
         --proximity $proximity --cross-gender $cross_gender \
 	      --rand-seed $rand_seed \
         --anon-data-suffix $anon_data_suffix $dset || exit 1;
+      # exit 1;
     fi
     if [ -f data/$dset/enrolls ]; then
       cp data/$dset/enrolls data/$dset$anon_data_suffix/ || exit 1

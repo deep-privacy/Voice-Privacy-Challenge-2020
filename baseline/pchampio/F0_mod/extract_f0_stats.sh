@@ -10,10 +10,11 @@ for data_dir in libri_dev_{enrolls,trials_f,trials_m} \
             libri_test_{enrolls,trials_f,trials_m} \
             vctk_test_{enrolls,trials_f_all,trials_m_all}; do
 
+  break
+
     mkdir -p ./pchampio/F0_mod/data/${data_dir}
 
     python ./pchampio/F0_mod/create_xvector_f0_map.py ./data/${data_dir} exp/models/2_xvect_extr/exp/xvector_nnet_1a/anon/xvectors_${data_dir}/xvector.scp ./pchampio/F0_mod/data/${data_dir}
-    break
 
 done
 

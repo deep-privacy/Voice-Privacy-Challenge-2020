@@ -11,7 +11,7 @@ set -e
 
 #===== begin config =======
 nj=20
-stage=0
+stage=3
 
 anoni_pool="libritts_train_other_500" # change this to the data you want to use for anonymization pool
 data_netcdf= # change this to dir where VC features data will be stored
@@ -76,7 +76,7 @@ fi
 # Extract pitch for source data
 if [ $stage -le 2 ]; then
   printf "${RED}\nStage a.2: Pitch extraction for ${data_dir}.${NC}\n"
-  local/featex/02_extract_pitch.sh --nj ${nj} data/${data_dir} || exit 1;
+  # local/featex/02_extract_pitch.sh --nj ${nj} data/${data_dir} || exit 1;
 fi
 
 # Extract BNs for source data
@@ -107,6 +107,7 @@ if [ $stage -le 4 ]; then
 
 
   # # For f0 modification on nsf and ss_am models
+  # #  pchampio/F0_mod/extract_f0_stats.sh
   local/anon/make_netcdf.sh --f0_mod true data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
     ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
     ${data_netcdf}/${data_dir} || exit 1;

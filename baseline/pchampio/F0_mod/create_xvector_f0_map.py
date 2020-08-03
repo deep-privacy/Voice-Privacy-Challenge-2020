@@ -22,11 +22,12 @@ def calc_stats(f0):
     ## TODO(Denis): use median instead of mean.
     f0 = f0[f0 > 1.]
     f0 = np.log(f0) # transfomation will be done in the log-F0 domain, so stats must be computed in this same domain.
-    mu, std = f0.mean(), f0.std()
+    mu, std, var = f0.mean(), f0.std(), f0.var()
 
     return {
         "mu_s" : mu,
         "std_s": std,
+        "var_s": var,
     }
 
 

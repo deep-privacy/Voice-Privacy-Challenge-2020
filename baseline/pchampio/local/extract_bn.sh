@@ -4,8 +4,8 @@
 . cmd.sh
 
 nj=32
-stage=0
-batchsize=1 # Tweak the batchsize depanding on the amount of GPU RAM
+stage=1
+batchsize=20 # Tweak the batchsize depanding on the amount of GPU RAM
 fbank_conf=fbank.conf
 pitch_conf=pitch.conf
 
@@ -54,7 +54,7 @@ decode_config=$espnet_libri_egs/conf/decode.yaml
 
 # Acoustic model
 am_model_arch=train_loc_60_pytorch_train_eprojs256_elayers3_subsample1_1_1_epochs15_dunits512_run.sh
-am_model=snapshot.ep.41
+am_model=model.acc.best
 am_model_fullpath=$espnet_libri_egs/exp/$am_model_arch/results/$am_model
 
 # Damped

@@ -46,7 +46,7 @@ def select_random_xvec(top500, pool_xvectors):
     # Take mean of 100 randomly selected xvectors
     pseudo_xvec = np.mean(pseudo_spk_matrix, axis=0)
     #  return pseudo_xvec
-    return pseudo_xvec, top500[0]
+    return pseudo_xvec, top500
 
 
 gender_rev = {'m': 'f', 'f': 'm'}
@@ -150,8 +150,11 @@ with WriteHelper(ark_scp_output) as writer:
           if not os.path.exists(p):
               os.mkdir(p)
           with open(join(p, uttid), 'w') as file:
-            print(uttid, ":", xvec[1])
-            file.write(str(xvec[1][0]))
+            print(uttid, ":", xvec[1][0], xvec[1][1], "...")
+            uttid_list = []
+            for uttid, distance in xvec[1]:
+                uttid_list.append(uttid)
+            file.write(str(uttid_list))
 
 print("Writing pseudo-speaker spk2gender.")
 with open(join(pseudo_xvecs_dir, 'spk2gender'), 'w') as f:
