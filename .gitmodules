@@ -13,3 +13,6 @@
 [submodule "espnet"]
 	path = espnet
 	url = https://github.com/deep-privacy/espnet
+[submodule "anonymization_metrics"]
+	path = anonymization_metrics
+	url = https://gitlab.inria.fr/magnet/anonymization_metrics.git
