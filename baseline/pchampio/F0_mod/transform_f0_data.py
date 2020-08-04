@@ -45,27 +45,20 @@ with ReadHelper('scp:'+pitch_file) as reader:
             selected_target_speaker_list = ast.literal_eval(f.read())
 
         pseudo_speaker_f0_stats = {"mu_s":0, "var_s":0, "std_s":0}
-        top_one_std = 0
-        top_one_mu = 0
+        #  selected_target_speaker_list = [selected_target_speaker_list[0]]
         for selected_target_speaker in selected_target_speaker_list:
             target_speaker_stats = {}
             with open(statsdir+"/"+"libritts_train_other_500/"+selected_target_speaker) as f:
                 target_speaker_stats = json.load(f)
                 mu = target_speaker_stats["mu_s"]
                 var = target_speaker_stats["var_s"]
-                if top_one_std == 0:
-                    top_one_std = target_speaker_stats["std_s"]
-                if top_one_mu == 0:
-                    top_one_mu = target_speaker_stats["mu_s"]
                 pseudo_speaker_f0_stats["mu_s"] += mu
                 pseudo_speaker_f0_stats["var_s"] += var
         pseudo_speaker_f0_stats["var_s"] /= len(selected_target_speaker_list)
         pseudo_speaker_f0_stats["mu_s"]  /= len(selected_target_speaker_list)
         pseudo_speaker_f0_stats["std_s"] = math.sqrt(pseudo_speaker_f0_stats["var_s"])
 
-        transfomation = {**source_stats, "mu_t":top_one_mu, "std_t":top_one_std}
-        #  transfomation = {**source_stats, "mu_t":target_speaker_stats["mu_s"], "std_t":top_one_std}
-        #  transfomation = {**source_stats, "mu_t":target_speaker_stats["mu_s"], "std_t":target_speaker_stats["std_s"]}
+        transfomation = {**source_stats, "mu_t":target_speaker_stats["mu_s"], "std_t":target_speaker_stats["std_s"]}
         print(key, transfomation)
 
         f0t = log_linear_transformation(f0.copy(), transfomation)

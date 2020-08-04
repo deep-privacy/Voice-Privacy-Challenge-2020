@@ -232,7 +232,6 @@ if [ $stage -le 9 ]; then
         --proximity $proximity --cross-gender $cross_gender \
 	      --rand-seed $rand_seed \
         --anon-data-suffix $anon_data_suffix $dset || exit 1;
-      # exit 1;
     fi
     if [ -f data/$dset/enrolls ]; then
       cp data/$dset/enrolls data/$dset$anon_data_suffix/ || exit 1
