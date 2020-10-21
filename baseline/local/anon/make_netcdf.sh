@@ -4,8 +4,7 @@
 . cmd.sh
 
 stage=0
-f0_mod=false
-skip_f0_xvector=0
+f0_mod="false"
 
 . utils/parse_options.sh
 
@@ -43,10 +42,8 @@ if [ $stage -le 1 ]; then
 fi
 
 if [ $stage -le 2 ]; then
-  if [ $skip_f0_xvector -le 1 ]; then
-    echo "Writing xvector and F0 for train."
-    python local/featex/create_xvector_f0_data.py ${src_data} ${xvector_file} ${out_dir} || exit 1;
-  fi
+  echo "Writing xvector and F0 for train."
+  python local/featex/create_xvector_f0_data.py ${src_data} ${xvector_file} ${out_dir} || exit 1;
 
   if $f0_mod; then
     echo "Apply linear transformation on F0."

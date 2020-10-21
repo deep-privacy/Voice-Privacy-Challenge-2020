@@ -61,6 +61,7 @@ plda_dir=${asv_eval_model}/xvect_train_clean_360
 anon_level_trials="spk"                # spk (speaker-level anonymization) or utt (utterance-level anonymization)
 anon_level_enroll="spk"                # spk (speaker-level anonymization) or utt (utterance-level anonymization)
 cross_gender="true"                   # false (same gender xvectors will be selected) or true (other gender xvectors)
+f0_transformation="false"
 distance="plda"                           # cosine or plda
 proximity="farthest"                      # nearest or farthest speaker to be selected for anonymization
 
@@ -200,10 +201,10 @@ fi
 # Anonymization
 if [ $stage -le 9 ]; then
   printf "${GREEN}\nStage 9: Anonymizing evaluation datasets...${NC}\n"
-  rand_seed=0
-  for dset in libri_dev_{enrolls,trials_f,trials_m} \
+  rand_seed=1
+  for dset in libri_test_{enrolls,trials_f,trials_m} \
+    libri_dev_{enrolls,trials_f,trials_m} \
             vctk_dev_{enrolls,trials_f_all,trials_m_all} \
-            libri_test_{enrolls,trials_f,trials_m} \
             vctk_test_{enrolls,trials_f_all,trials_m_all}; do
 	if [ -z "$(echo $dset | grep enrolls)" ]; then
       anon_level=$anon_level_trials
@@ -237,6 +238,7 @@ if [ $stage -le 9 ]; then
         --anon-xvec-out-dir $anon_xvec_out_dir --plda-dir $xvec_nnet_dir \
         --pseudo-xvec-rand-level $anon_level --distance $distance \
         --proximity $proximity --cross-gender $cross_gender \
+        --f0-transformation $f0_transformation \
 	      --rand-seed $rand_seed \
         --anon-data-suffix $anon_data_suffix $dset || exit 1;
     fi

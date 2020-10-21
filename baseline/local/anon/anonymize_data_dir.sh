@@ -11,7 +11,7 @@ set -e
 
 #===== begin config =======
 nj=20
-stage=1
+stage=3
 
 anoni_pool="libritts_train_other_500" # change this to the data you want to use for anonymization pool
 data_netcdf= # change this to dir where VC features data will be stored
@@ -30,6 +30,7 @@ plda_dir=${xvec_nnet_dir}/xvectors_train
 
 pseudo_xvec_rand_level=spk  # spk (all utterances will have same xvector) or utt (each utterance will have randomly selected xvector)
 cross_gender="false"        # true, same gender xvectors will be selected; false, other gender xvectors
+f0_transformation="false"        # true, same gender xvectors will be selected; false, other gender xvectors
 distance="cosine"           # cosine/plda
 proximity="farthest"        # nearest/farthest
 
@@ -63,9 +64,27 @@ if [ $stage -le 0 ]; then
 	  ${anon_xvec_out_dir} || exit 1;
 fi
 
-# Generate pseudo-speakers for source data
+# Extract pitch for source data
 if [ $stage -le 1 ]; then
-  printf "${RED}\nStage a.1: Generating pseudo-speakers for ${data_dir}.${NC}\n"
+  printf "${RED}\nStage a.1: Pitch extraction for ${data_dir}.${NC}\n"
+  local/featex/02_extract_pitch.sh --nj ${nj} data/${data_dir} || exit 1;
+fi
+
+# Extract BNs for source data
+ if [ $stage -le 2 ]; then
+  # # For end-to-end BN
+  # printf "${RED}\nStage a.2: BN extraction for ${data_dir}.${NC}\n"
+  # pchampio/local/extract_bn.sh ${data_dir}
+
+  # Original
+  printf "${RED}\nStage a.2: PPG extraction for ${data_dir}.${NC}\n"
+    local/featex/extract_ppg.sh --nj $nj --stage 0 \
+    ${data_dir} ${ppg_model} ${ppg_dir}/ppg_${data_dir} || exit 1;
+fi
+
+# Generate pseudo-speakers for source data
+if [ $stage -le 3 ]; then
+  printf "${RED}\nStage a.3: Generating pseudo-speakers for ${data_dir}.${NC}\n"
   local/anon/make_pseudospeaker.sh --rand-level ${pseudo_xvec_rand_level} \
       	  --cross-gender ${cross_gender} --distance ${distance} \
 	  --proximity ${proximity} --rand-seed ${rand_seed} \
@@ -73,23 +92,6 @@ if [ $stage -le 1 ]; then
 	  ${plda_dir} || exit 1;
 fi
 
-# Extract pitch for source data
-if [ $stage -le 2 ]; then
-  printf "${RED}\nStage a.2: Pitch extraction for ${data_dir}.${NC}\n"
-  local/featex/02_extract_pitch.sh --nj ${nj} data/${data_dir} || exit 1;
-fi
-
-# Extract BNs for source data
- if [ $stage -le 3 ]; then
-  # # For end-to-end BN
-  # printf "${RED}\nStage a.3: BN extraction for ${data_dir}.${NC}\n"
-  # pchampio/local/extract_bn.sh ${data_dir}
-
-  # Original
-  printf "${RED}\nStage a.3: PPG extraction for ${data_dir}.${NC}\n"
-    local/featex/extract_ppg.sh --nj $nj --stage 0 \
-    ${data_dir} ${ppg_model} ${ppg_dir}/ppg_${data_dir} || exit 1;
-fi
 
 # Create netcdf data for voice conversion
 if [ $stage -le 4 ]; then
@@ -108,7 +110,7 @@ if [ $stage -le 4 ]; then
 
   # # For f0 modification on nsf and ss_am models
   # #  pchampio/F0_mod/extract_f0_stats.sh
-  local/anon/make_netcdf.sh --f0_mod true data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
+  local/anon/make_netcdf.sh --f0_mod $f0_transformation data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
     ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
     ${data_netcdf}/${data_dir} || exit 1;
 
@@ -124,6 +126,9 @@ if [ $stage -le 5 ]; then
   local/vc/am/01_gen.sh ${data_netcdf}/${data_dir} ${ppg_type} || exit 1;
 fi
 
+# ss o nsf o 27 (o-a) / 23 (a-a)
+# ss o nsf a 22 (o-a) / 16 (a-a)
+
 
 # F0 mod only for NSF
   # local/anon/make_netcdf.sh --f0_mod true data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
@@ -131,9 +136,9 @@ fi
     # ${data_netcdf}/${data_dir} || exit 1;
 
 # # Write back original xvector only for NSF
-  # local/anon/make_netcdf.sh data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
-    # ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
-    # ${data_netcdf}/${data_dir} || exit 1;
+# local/anon/make_netcdf.sh data/${data_dir} ${ppg_dir}/ppg_${data_dir}/phone_post.scp \
+  # ${anon_xvec_out_dir}/xvectors_${data_dir}/pseudo_xvecs/pseudo_xvector.scp \
+  # ${data_netcdf}/${data_dir} || exit 1;
 
 if [ $stage -le 6 ]; then
   printf "${RED}\nStage a.6: Generate waveform from NSF model for ${data_dir}.${NC}\n"

@@ -40,5 +40,3 @@ with ReadHelper('scp:'+xvector_file) as reader:
         xvec = np.repeat(mat, plen, axis=0)
         #  xvec = np.repeat(np.random.rand(512), plen, axis=0)
         readwrite.write_raw_mat(xvec, join(xvec_out_dir, key+'.xvector'))
-
-

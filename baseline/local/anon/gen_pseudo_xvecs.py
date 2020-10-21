@@ -21,7 +21,7 @@ proximity = args[8]
 
 rand_seed = args[9]
 
-REGION = 100
+REGION = 1
 WORLD = 200
 
 random.seed(rand_seed)
@@ -46,7 +46,9 @@ def select_random_xvec(top500, pool_xvectors):
     # Take mean of 100 randomly selected xvectors
     pseudo_xvec = np.mean(pseudo_spk_matrix, axis=0)
     #  return pseudo_xvec
-    return pseudo_xvec, top500
+    print(pseudo_spk_list)
+    print(top500)
+    return pseudo_xvec, pseudo_spk_list
 
 
 gender_rev = {'m': 'f', 'f': 'm'}
@@ -92,6 +94,7 @@ print("Read ", c, "pool xvectors")
 
 pseudo_xvec_map = {}
 pseudo_gender_map = {}
+print("Utt2gender list", src_spk2gender)
 for spk, gender in src_spk2gender.items():
     # Filter the affinity pool by gender
     affinity_pool = {}
@@ -123,6 +126,10 @@ for spk, gender in src_spk2gender.items():
         # For rand_level = spk, one xvector is assigned to all the utterances
         # of a speaker
         pseudo_xvec = select_random_xvec(top_spk, pool_xvectors)
+        if len(pseudo_xvec[1]) > 1:
+            print("SPK:", spk, "--(pseudo x-vector target)-->", str(pseudo_xvec[0][:5]), "derived from:", pseudo_xvec[1][0], pseudo_xvec[1][1], pseudo_xvec[1][2], pseudo_xvec[1][3], "...", "x-vector sum:", sum(pseudo_xvec[0]))
+        else:
+            print("SPK:", spk, "--(pseudo x-vector target)-->", str(pseudo_xvec[0][:5]), "derived from:", pseudo_xvec[1][0])
         # Assign it to all utterances of the current speaker
         for uttid in src_spk2utt[spk]:
             pseudo_xvec_map[uttid] = pseudo_xvec
@@ -138,6 +145,7 @@ for spk, gender in src_spk2gender.items():
         print("rand_level not supported! Errors will happen!")
 
 
+
 # Write features as ark,scp
 print("Writing pseud-speaker xvectors to: "+pseudo_xvecs_dir)
 ark_scp_output = 'ark,scp:{}/{}.ark,{}/{}.scp'.format(
@@ -150,7 +158,7 @@ with WriteHelper(ark_scp_output) as writer:
           if not os.path.exists(p):
               os.mkdir(p)
           with open(join(p, uttid), 'w') as file:
-            print(uttid, ":", xvec[1][0], xvec[1][1], "...")
+            #  print(uttid, ":", xvec[1][0], xvec[1][1], "...")
             uttid_list = []
             for uttid, distance in xvec[1]:
                 uttid_list.append(uttid)

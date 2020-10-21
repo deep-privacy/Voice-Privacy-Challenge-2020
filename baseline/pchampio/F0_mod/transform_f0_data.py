@@ -58,7 +58,7 @@ with ReadHelper('scp:'+pitch_file) as reader:
         pseudo_speaker_f0_stats["mu_s"]  /= len(selected_target_speaker_list)
         pseudo_speaker_f0_stats["std_s"] = math.sqrt(pseudo_speaker_f0_stats["var_s"])
 
-        transfomation = {**source_stats, "mu_t":target_speaker_stats["mu_s"], "std_t":target_speaker_stats["std_s"]}
+        transfomation = {**source_stats, "mu_t":pseudo_speaker_f0_stats["mu_s"], "std_t":pseudo_speaker_f0_stats["std_s"]}
         print(key, transfomation)
 
         f0t = log_linear_transformation(f0.copy(), transfomation)

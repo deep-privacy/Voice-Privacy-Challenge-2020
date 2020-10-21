@@ -63,7 +63,7 @@ def print_table(scores_file,table,task,partition):
         path_latex_results_folder = os.path.dirname(os.path.abspath(scores_file))+'/latex_tables'
         if not os.path.isdir(path_latex_results_folder): os.makedirs(path_latex_results_folder)
         if partition=='': partition ='combined'
-        path_latex_file = path_latex_results_folder + '/' + task + '_' + partition + '.latex'          
+        path_latex_file = path_latex_results_folder + '/' + scores_file +'.' + task + '_' + partition + '.latex'          
         if os.path.isfile(path_latex_file): os.remove(path_latex_file)
         outf = open(path_latex_file,"a")    
         outf.writelines(table)

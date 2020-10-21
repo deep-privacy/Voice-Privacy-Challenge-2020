@@ -31,7 +31,7 @@ steps/make_mfcc.sh --write-utt2num-frames true --mfcc-config conf/mfcc.conf \
     --nj $nj --cmd "$train_cmd" ${data_dir} exp/make_mfcc $mfccdir || exit 1
 
 utils/fix_data_dir.sh ${data_dir} || exit 1
-    
+
 sid/compute_vad_decision.sh --nj $nj --cmd "$train_cmd" ${data_dir} exp/make_vad $vaddir || exit 1
 
 utils/fix_data_dir.sh ${data_dir} || exit 1
